@@ -19,6 +19,7 @@ import { AuthUser } from 'src/types/AuthUser';
 import { ReqType } from 'src/types/RequestTypes';
 import { UserCollectionService } from './user-collection.service';
 import { UserCollection } from './user-collections.model';
+import * as E from 'fp-ts/Either';
 
 const mockPrisma = mockDeep<PrismaService>();
 const mockPubSub = mockDeep<PubSubService>();
@@ -58,6 +59,19 @@ const rootRESTUserCollection: DBUserCollection = {
   isFavorite: false,
 };
 
+const rootRESTUserFavorited: DBUserCollection = {
+  id: '123',
+  orderIndex: 1,
+  parentID: null,
+  title: 'Root Collection 1',
+  userUid: user.uid,
+  type: ReqType.REST,
+  createdOn: currentTime,
+  updatedOn: currentTime,
+  data: {},
+  isFavorite: true,
+};
+
 const rootRESTUserCollectionCasted: UserCollection = {
   id: '123',
   parentID: null,
@@ -79,6 +93,19 @@ const rootGQLUserCollection: DBUserCollection = {
   updatedOn: currentTime,
   data: {},
   isFavorite: false,
+};
+
+const rootGQLUserCollectionFavorite: DBUserCollection = {
+  id: '123',
+  orderIndex: 1,
+  parentID: null,
+  title: 'Root Collection 1',
+  userUid: user.uid,
+  type: ReqType.GQL,
+  createdOn: currentTime,
+  updatedOn: currentTime,
+  data: {},
+  isFavorite: true,
 };
 
 const rootGQLUserCollectionCasted: UserCollection = {
@@ -150,6 +177,20 @@ const childRESTUserCollection: DBUserCollection = {
   isFavorite: false,
 };
 
+const childRESTUserCollectionFavorited: DBUserCollection = {
+  id: '234',
+  orderIndex: 1,
+  parentID: rootRESTUserCollection.id,
+  title: 'Child Collection 1',
+  userUid: user.uid,
+  type: ReqType.REST,
+  createdOn: currentTime,
+  updatedOn: currentTime,
+  data: {},
+  isFavorite: true,
+};
+
+
 const childRESTUserCollectionCasted: UserCollection = {
   id: '234',
   parentID: rootRESTUserCollection.id,
@@ -171,6 +212,19 @@ const childGQLUserCollection: DBUserCollection = {
   updatedOn: currentTime,
   data: {},
   isFavorite: false,
+};
+
+const childGQLUserCollectionFavorited: DBUserCollection = {
+  id: '234',
+  orderIndex: 1,
+  parentID: rootRESTUserCollection.id,
+  title: 'Child Collection 1',
+  userUid: user.uid,
+  type: ReqType.GQL,
+  createdOn: currentTime,
+  updatedOn: currentTime,
+  data: {},
+  isFavorite: true,
 };
 
 const childGQLUserCollectionCasted: UserCollection = {
@@ -677,6 +731,69 @@ beforeEach(() => {
   mockReset(mockPrisma);
   mockPubSub.publish.mockClear();
 });
+
+describe('favoriteCollection',() => {
+  test('should change a REST user collection from default state (unfavorite) to favorited', async () => {
+    mockPrisma.userCollection.findUniqueOrThrow.mockResolvedValueOnce(
+      rootRESTUserCollection,
+    );
+
+    const result = await userCollectionService.favoriteUserCollection(
+      rootRESTUserCollection.id,
+      true
+    );
+    expect(result).toEqualRight(rootRESTUserFavorited);
+
+  });
+  test('should change a GQL user collection from default state (unfavorite) to favorited', async () => {
+    mockPrisma.userCollection.findUniqueOrThrow.mockResolvedValueOnce(
+      rootGQLUserCollection,
+    );
+
+    const result = await userCollectionService.favoriteUserCollection(
+      rootGQLUserCollection.id,
+      true
+    );
+    expect(result).toEqualRight(rootGQLUserCollectionFavorite);
+
+  });
+  test('should change a REST child collection from default state (unfavorite) to favorited', async () => {
+    mockPrisma.userCollection.findUniqueOrThrow.mockResolvedValueOnce(
+      childRESTUserCollection,
+    );
+
+    const result = await userCollectionService.favoriteUserCollection(
+      childRESTUserCollection.id,
+      true
+    );
+    expect(result).toEqualRight(childRESTUserCollectionFavorited);
+
+  });
+  test('should change a child GQL user collection from default state (unfavorite) to favorited', async () => {
+    mockPrisma.userCollection.findUniqueOrThrow.mockResolvedValueOnce(
+      childGQLUserCollection,
+    );
+
+
+    const result = await userCollectionService.favoriteUserCollection(
+      childGQLUserCollection.id,
+      true
+    );
+    expect(result).toEqualRight(childGQLUserCollectionFavorited);
+
+  });
+  test('should return null with invalid collectionID', async () => {
+    mockPrisma.userCollection.findUniqueOrThrow.mockResolvedValueOnce(
+      childRESTUserCollection,
+    );
+
+    const result = await userCollectionService.favoriteUserCollection(
+      'invalidID!!!',
+      true
+    );
+    expect(result).toEqual(null);
+  });
+})
 
 describe('getParentOfUserCollection', () => {
   test('should return a user-collection successfully with valid collectionID', async () => {

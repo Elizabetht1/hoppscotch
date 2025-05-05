@@ -56,6 +56,7 @@ export class UserCollectionService {
       type: collection.type,
       parentID: collection.parentID,
       userID: collection.userUid,
+      isFavorite: collection.isFavorite,
       data,
     };
   }
@@ -305,7 +306,8 @@ export class UserCollectionService {
         data: data ?? undefined,
         orderIndex: !parentUserCollectionID
           ? (await this.getRootCollectionsCount(user.uid)) + 1
-          : (await this.getChildCollectionsCount(parentUserCollectionID)) + 1
+          : (await this.getChildCollectionsCount(parentUserCollectionID)) + 1,
+        isFavorite: true
       },
     });
 
@@ -437,14 +439,13 @@ export class UserCollectionService {
    */
   async favoriteUserCollection(collectionID: string, favorite: boolean) {
     try {
+
       const updatedCollection = await this.prisma.userCollection.update({
         where: {
           id: collectionID,
         },
         data: {
-          data: {
-            favorite
-          }
+          isFavorite: favorite,
         },
       });
 
@@ -1072,7 +1073,8 @@ export class UserCollectionService {
           this.generatePrismaQueryObj(f, userID, index + 1, reqType),
         ),
       },
-      data: folder.data ?? undefined
+      data: folder.data ?? undefined,
+      isFavorite: true
     };
   }
 

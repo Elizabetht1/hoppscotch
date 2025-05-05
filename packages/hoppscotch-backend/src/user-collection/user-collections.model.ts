@@ -26,13 +26,13 @@ export class UserCollection {
   })
   type: ReqType;
 
+  isFavorite: boolean | null;
+
   parentID: string | null;
 
   userID: string;
 
-  isFavorite: boolean | null;
-
-
+  
 }
 
 @ObjectType()
