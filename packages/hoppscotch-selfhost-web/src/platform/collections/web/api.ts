@@ -25,6 +25,9 @@ import {
   DeleteUserCollectionDocument,
   DeleteUserCollectionMutation,
   DeleteUserCollectionMutationVariables,
+  FavoriteUserCollectionDocument,
+  FavoriteUserCollectionMutation,
+  FavoriteUserCollectionMutationVariables,
   DeleteUserRequestDocument,
   DeleteUserRequestMutation,
   DeleteUserRequestMutationVariables,
@@ -154,13 +157,25 @@ export const createGQLChildUserCollection = (
     data,
   })()
 
-export const deleteUserCollection = (userCollectionID: string) =>
-  runMutation<
+export const deleteUserCollection = (userCollectionID: string) => {
+  console.log("Calling delete user mutation")
+  return runMutation<
     DeleteUserCollectionMutation,
     DeleteUserCollectionMutationVariables,
     ""
   >(DeleteUserCollectionDocument, {
     userCollectionID,
+  })()
+}
+
+export const favoriteUserCollection = (userCollectionID: string) =>
+  runMutation<
+    FavoriteUserCollectionMutation,
+    FavoriteUserCollectionMutationVariables,
+    ""
+  >(FavoriteUserCollectionDocument, {
+    userCollectionID,
+    favorite: true,
   })()
 
 export const renameUserCollection = (

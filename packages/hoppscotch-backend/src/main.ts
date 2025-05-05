@@ -67,14 +67,14 @@ async function bootstrap() {
     console.log('Enabling CORS with development settings');
 
     app.enableCors({
-      origin: configService.get('WHITELISTED_ORIGINS').split(','),
+      origin: "*/*",
       credentials: true,
     });
   } else {
-    console.log('Enabling CORS with production settings');
+    console.log('Enabling CORS with production settings, */* crossorigin');
 
     app.enableCors({
-      origin: configService.get('WHITELISTED_ORIGINS').split(','),
+      origin: "*/*",
       credentials: true,
     });
   }

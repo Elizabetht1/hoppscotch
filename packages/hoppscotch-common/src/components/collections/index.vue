@@ -1943,8 +1943,9 @@ const favoriteCollection = (payload: {
 }) => {
   console.log("favoriting the collection \n")
   const { collection, collectionIndex } = payload
-  favoriteRESTCollection(collection, collectionIndex)
+  favoriteRESTCollection(parseInt(collectionIndex), collection)
 }
+
 // The request is picked in the save request as modal
 const selectPicked = (payload: Picked | null) => {
   emit("select", payload)

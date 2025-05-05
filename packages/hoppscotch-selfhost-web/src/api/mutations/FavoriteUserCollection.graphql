@@ -1,0 +1,3 @@
+mutation FavoriteUserCollection($userCollectionID: ID!, $favorite: Boolean!) {
+  favoriteUserCollection(userCollectionID: $userCollectionID, favorite: $favorite)
+}

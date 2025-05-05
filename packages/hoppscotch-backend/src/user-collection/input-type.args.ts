@@ -43,6 +43,21 @@ export class GetUserChildCollectionArgs extends PaginationArgs {
 }
 
 @ArgsType()
+export class FavoriteUserCollectionsArgs {
+  @Field(() => ID, {
+    name: 'userCollectionID',
+    description: 'ID of the user collection',
+  })
+  userCollectionID: string;
+
+  @Field({
+    name: 'favorite',
+    description: 'Whether to favorite or unfavorite collection',
+  })
+  favorite: boolean;
+}
+
+@ArgsType()
 export class RenameUserCollectionsArgs {
   @Field(() => ID, {
     name: 'userCollectionID',

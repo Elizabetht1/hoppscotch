@@ -22,6 +22,7 @@ import {
   deleteUserRequest,
   duplicateUserCollection,
   editGQLUserRequest,
+  favoriteUserCollection,
   updateUserCollection,
 } from "./api"
 
@@ -196,8 +197,14 @@ export const storeSyncDefinition: StoreSyncDefinitionOf<
     )
   },
   async removeCollection({ collectionID }) {
+    console.log("Calling delete user collection")
     if (collectionID) {
       await deleteUserCollection(collectionID)
+    }
+  },
+  async favoriteCollection({ collectionID }) {
+    if (collectionID) {
+      await favoriteUserCollection(collectionID)
     }
   },
   editCollection({ collection, collectionIndex }) {
