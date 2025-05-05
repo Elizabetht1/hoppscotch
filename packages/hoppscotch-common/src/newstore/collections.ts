@@ -206,6 +206,28 @@ const restCollectionDispatchers = defineDispatchers({
     }
   },
 
+  toggleFavoriteCollection(
+    { state }: RESTCollectionStoreType,
+    { collectionIndex, collectionID, }: { collectionIndex: number; collectionID?: string }
+
+  ) {
+    const newState = state;
+
+    // const indexPaths = path.split("/").map((x) => parseInt(x));
+    // const targetCollection = navigateToFolderWithIndexPath(newState, indexPaths);
+
+    // if (!targetCollection) {
+    //   console.error(`Could not resolve path '${path}'. Skipping toggleFavoriteCollection.`);
+    //   return {};
+    // }
+
+    // targetCollection.isFavorited = !targetCollection.isFavorited;
+
+    return {
+      state: newState,
+    }
+  },
+
   removeCollection(
     { state }: RESTCollectionStoreType,
     {
@@ -1445,6 +1467,20 @@ export function removeRESTRequest(
   })
 }
 
+// toggle the REST collection favorite
+export function toggleRESTCollectionFavorite(
+  path: string,
+  collectionSyncID?: string
+) {
+  restCollectionStore.dispatch({
+    dispatcher: "toggleFavorite",
+    payload: {
+      path,
+      collectionSyncID,
+    },
+  })
+}
+
 export function moveRESTRequest(
   path: string,
   requestIndex: number,
@@ -1648,6 +1684,20 @@ export function removeGraphqlRequest(
       path,
       requestIndex,
       requestID,
+    },
+  })
+}
+
+// toggle the GQL collection favorite
+export function toggleGraphQLCollectionFavorite(
+  path: string,
+  collectionSyncID?: string
+) {
+  restCollectionStore.dispatch({
+    dispatcher: "toggleFavorite",
+    payload: {
+      path,
+      collectionSyncID,
     },
   })
 }

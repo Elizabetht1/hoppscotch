@@ -50,6 +50,9 @@ import {
   RenameUserCollectionMutation,
   RenameUserCollectionMutationVariables,
   ReqType,
+  ToggleCollectionFavoriteStatusDocument,
+  ToggleCollectionFavoriteStatusMutation,
+  ToggleCollectionFavoriteStatusMutationVariables,
   UpdateGqlUserRequestDocument,
   UpdateGqlUserRequestMutation,
   UpdateGqlUserRequestMutationVariables,
@@ -223,6 +226,15 @@ export const editUserRequest = (
     id: requestID,
     request,
     title,
+  })()
+
+export const toggleCollectionFavoriteStatus = (id: string) =>
+  runMutation<
+    ToggleCollectionFavoriteStatusMutation,
+    ToggleCollectionFavoriteStatusMutationVariables,
+    ""
+  >(ToggleCollectionFavoriteStatusDocument, {
+    id,
   })()
 
 export const editGQLUserRequest = (

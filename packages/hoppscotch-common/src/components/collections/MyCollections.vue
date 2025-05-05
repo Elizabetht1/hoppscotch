@@ -84,6 +84,13 @@
                   collectionSyncID: node.data.data.data.id,
                 })
             "
+            @favorite-collection="
+              node.data.type === 'collections' &&
+                emit('favorite-collection', {
+                  collectionIndex: node.id,
+                  collection: node.data.data.data,
+                })
+            "
             @edit-properties="
               node.data.type === 'collections' &&
                 emit('edit-properties', {

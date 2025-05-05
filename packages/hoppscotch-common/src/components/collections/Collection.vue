@@ -226,9 +226,16 @@
                     :label="props.data.isFavorited ? t('action.unfavorite') : t('action.favorite')"
                     :loading="favoriteCollectionLoading"
                     :shortcut="['F']"
+                    @toggle-favorite="toggleFavorite(props.id)"
                     @click="
                       () => {
-                        emit(props.data.isFavorited ? 'unfavorite-collection' : 'favorite-collection')
+                        console.log(
+                          props.data.isFavorited
+                            ? 'Unfavoriting collection'
+                            : 'Favoriting collection'
+                        )
+                        // emit(props.data.isFavorited ? 'unfavorite-collection' : 'favorite-collection')
+                        emit('favorite-collection')
                         hide()
                       }
                     "
@@ -277,6 +284,11 @@ import {
   changeCurrentReorderStatus,
   currentReorderingStatus$,
 } from "~/newstore/reordering"
+// importing the favoriting functions from newstore
+import {
+  toggleGraphQLCollectionFavorite,
+  toggleRestCollectionFavorite,
+} from "~/newstore/collections"
 import IconCheckCircle from "~icons/lucide/check-circle"
 import IconCopy from "~icons/lucide/copy"
 import IconFavorite from "~icons/lucide/heart"
@@ -369,12 +381,16 @@ const ordering = ref(false)
 const orderingLastItem = ref(false)
 const dropItemID = ref("")
 
+// this is for toggling the favorite state of the collection
 const toggleFavorite = (collectionID: string) => {
-  const collection = collections.find((c) => c.id === collectionID);
-  if (collection) {
-    collection.isFavorited = !collection.isFavorited;
-    // Optionally, make an API call to persist the change
-  }
+  // const collection = collections.find((c) => c.id === collectionID);
+  // if (collection) {
+  //   collection.isFavorited = !collection.isFavorited;
+  //   // Optionally, make an API call to persist the change
+  // }
+  if (props.page === "rest")
+    toggleRestCollectionFavorite(collectionID, props.data.isFavorited)
+  else toggleGraphQLCollectionFavorite(collectionID, props.data.isFavorited)
 };
 
 const currentReorderingStatus = useReadonlyStream(currentReorderingStatus$, {

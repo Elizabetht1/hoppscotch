@@ -114,7 +114,7 @@
                 />
                 <HoppSmartItem
                   ref="favorite"
-                  :icon="IconCopy"
+                  :icon="IconFavorite"
                   :label="`${t('action.favorite')}`"
                   :shortcut="['F']"
                   @click="
@@ -149,6 +149,7 @@ import IconFile from "~icons/lucide/file"
 import IconMoreVertical from "~icons/lucide/more-vertical"
 import IconEdit from "~icons/lucide/edit"
 import IconCopy from "~icons/lucide/copy"
+import IconFavorite from "~icons/lucide/heart"
 import IconTrash2 from "~icons/lucide/trash-2"
 import { PropType, computed, ref } from "vue"
 import { useI18n } from "@composables/i18n"
@@ -163,6 +164,7 @@ const tippyActions = ref<any | null>(null)
 const options = ref<any | null>(null)
 const edit = ref<any | null>(null)
 const duplicate = ref<any | null>(null)
+const favorite = ref<any | null>(null)
 const deleteAction = ref<any | null>(null)
 
 const t = useI18n()

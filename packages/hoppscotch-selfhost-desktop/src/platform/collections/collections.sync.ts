@@ -25,6 +25,7 @@ import {
   moveUserCollection,
   moveUserRequest,
   renameUserCollection,
+  toggleCollectionFavoriteStatus,
   updateUserCollectionOrder,
 } from "./collections.api"
 
@@ -157,6 +158,11 @@ export const storeSyncDefinition: StoreSyncDefinitionOf<
 
     if (collectionID && collection.name) {
       renameUserCollection(collectionID, collection.name)
+    }
+  },
+  toggleFavorite({ collectionID }) {
+    if (collectionID) {
+      toggleCollectionFavoriteStatus(collectionID)
     }
   },
   async addFolder({ name, path }) {

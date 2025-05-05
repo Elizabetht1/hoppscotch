@@ -1,0 +1,6 @@
+mutation ToggleCollectionFavoriteStatus($id: ID!) {
+  toggleCollectionFavoriteStatus(id: $id) {
+    id
+    isFavorited
+  }
+}
