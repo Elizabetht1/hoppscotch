@@ -38,7 +38,7 @@ export class UserCollectionService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly pubsub: PubSubService,
-  ) {}
+  ) { }
 
   TITLE_LENGTH = 1;
 
@@ -286,10 +286,10 @@ export class UserCollectionService {
 
     const isParent = parentUserCollectionID
       ? {
-          connect: {
-            id: parentUserCollectionID,
-          },
-        }
+        connect: {
+          id: parentUserCollectionID,
+        },
+      }
       : undefined;
 
     const userCollection = await this.prisma.userCollection.create({
@@ -305,8 +305,7 @@ export class UserCollectionService {
         data: data ?? undefined,
         orderIndex: !parentUserCollectionID
           ? (await this.getRootCollectionsCount(user.uid)) + 1
-          : (await this.getChildCollectionsCount(parentUserCollectionID)) + 1,
-        isFavorite: false,
+          : (await this.getChildCollectionsCount(parentUserCollectionID)) + 1
       },
     });
 
@@ -424,6 +423,32 @@ export class UserCollectionService {
       );
 
       return E.right(this.cast(updatedUserCollection));
+    } catch (error) {
+      return E.left(USER_COLL_NOT_FOUND);
+    }
+  }
+
+  /**
+   * Update the collection to be favorited or unfavorited
+   *
+   * @param collectionID The Collection Id
+   * @param favorite Whether the collection is favorited or not
+   * @returns The deleted UserCollection
+   */
+  async favoriteUserCollection(collectionID: string, favorite: boolean) {
+    try {
+      const updatedCollection = await this.prisma.userCollection.update({
+        where: {
+          id: collectionID,
+        },
+        data: {
+          data: {
+            favorite
+          }
+        },
+      });
+
+      return E.right(updatedCollection);
     } catch (error) {
       return E.left(USER_COLL_NOT_FOUND);
     }
@@ -1047,8 +1072,7 @@ export class UserCollectionService {
           this.generatePrismaQueryObj(f, userID, index + 1, reqType),
         ),
       },
-      data: folder.data ?? undefined,
-      isFavorite: false 
+      data: folder.data ?? undefined
     };
   }
 
@@ -1102,10 +1126,10 @@ export class UserCollectionService {
 
     const parent = destCollectionID
       ? {
-          connect: {
-            id: destCollectionID,
-          },
-        }
+        connect: {
+          id: destCollectionID,
+        },
+      }
       : undefined;
 
     const userCollections = await this.prisma.$transaction(

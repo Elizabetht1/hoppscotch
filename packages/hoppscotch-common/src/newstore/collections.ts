@@ -502,24 +502,19 @@ const restCollectionDispatchers = defineDispatchers({
   favoriteCollection(
     { state }: RESTCollectionStoreType,
     {
-      collectionIndex,
-      collection,
-    }: {
-      collectionIndex: string
-      collection: HoppCollection
-    }
+      collectionIndex, // this collectionID is used to sync the collection removal
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      collectionID,
+    }: { collectionIndex: number; collectionID?: string }
   ) {
-    console.log(
-      `updating favorite collection: ${collectionIndex}, ${collection}\n`
-    )
-
-    console.log(`state: ${state} \n`)
-    console.log(state)
-    console.log(`collection: ${collection} \n`)
-    console.log(collection)
-    // newState.data.isFavorited = true
     return {
+<<<<<<< HEAD
       state: state,
+=======
+      state: state.map((col, index) =>
+        index === collectionIndex ? { ...col, ...{ isFavorited: true } } : col
+      ),
+>>>>>>> attempted-mutation
     }
   },
 
@@ -875,6 +870,21 @@ const gqlCollectionDispatchers = defineDispatchers({
     return {
       state: (state as any).filter(
         (_: any, i: number) => i !== collectionIndex
+      ),
+    }
+  },
+
+  favoriteCollection(
+    { state }: GraphqlCollectionStoreType,
+    {
+      collectionIndex, // this collectionID is used to sync the collection removal
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      collectionID,
+    }: { collectionIndex: number; collectionID?: string }
+  ) {
+    return {
+      state: state.map((col, index) =>
+        index === collectionIndex ? { ...col, ...{ isFavorited: true } } : col
       ),
     }
   },
@@ -1503,14 +1513,14 @@ export function updateRESTRequestOrder(
 }
 
 export function favoriteRESTCollection(
-  collectionIndex: string,
-  collection: HoppCollection
+  collectionIndex: number,
+  collectionID?: string
 ) {
   restCollectionStore.dispatch({
     dispatcher: "favoriteCollection",
     payload: {
       collectionIndex,
-      collection,
+      collectionID,
     },
   })
 }
@@ -1551,6 +1561,19 @@ export function addGraphqlCollection(collection: HoppCollection) {
     dispatcher: "addCollection",
     payload: {
       collection,
+    },
+  })
+}
+
+export function favoriteGraphqlCollection(
+  collectionIndex: number,
+  collectionID?: string
+) {
+  graphqlCollectionStore.dispatch({
+    dispatcher: "favoriteCollection",
+    payload: {
+      collectionIndex,
+      collectionID,
     },
   })
 }

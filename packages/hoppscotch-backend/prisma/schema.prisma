@@ -205,7 +205,6 @@ model UserCollection {
   type       ReqType
   createdOn  DateTime         @default(now()) @db.Timestamp(3)
   updatedOn  DateTime         @updatedAt @db.Timestamp(3)
-  isFavorite Boolean?         @default(false)
 }
 
 enum TeamMemberRole {

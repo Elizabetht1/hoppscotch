@@ -25,6 +25,7 @@ import {
   deleteUserRequest,
   duplicateUserCollection,
   editUserRequest,
+  favoriteUserCollection,
   moveUserCollection,
   moveUserRequest,
   updateUserCollection,
@@ -200,6 +201,11 @@ export const storeSyncDefinition: StoreSyncDefinitionOf<
   async removeCollection({ collectionID }) {
     if (collectionID) {
       await deleteUserCollection(collectionID)
+    }
+  },
+  async favoriteCollection({ collectionID }) {
+    if (collectionID) {
+      await favoriteUserCollection(collectionID)
     }
   },
   editCollection({ partialCollection: collection, collectionIndex }) {

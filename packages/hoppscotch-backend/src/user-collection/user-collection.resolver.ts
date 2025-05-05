@@ -27,6 +27,7 @@ import { PaginationArgs } from 'src/types/input-types.args';
 import {
   CreateChildUserCollectionArgs,
   CreateRootUserCollectionArgs,
+  FavoriteUserCollectionsArgs,
   ImportUserCollectionsFromJSONArgs,
   MoveUserCollectionArgs,
   RenameUserCollectionsArgs,
@@ -327,6 +328,24 @@ export class UserCollectionResolver {
   }
 
   @Mutation(() => Boolean, {
+    description: 'Favorite a user collection',
+  })
+  @UseGuards(GqlAuthGuard)
+  async favoriteUserCollection(
+    @Args() args: FavoriteUserCollectionsArgs,
+    @GqlUser() user: AuthUser,
+  ) {
+    console.log("FAVORITING USER COLLECTION!!!!");
+    const result = await this.userCollectionService.favoriteUserCollection(
+      args.userCollectionID,
+      true
+    );
+
+    if (E.isLeft(result)) throwErr(result.left);
+    return result.right;
+  }
+
+  @Mutation(() => Boolean, {
     description: 'Delete a user collection',
   })
   @UseGuards(GqlAuthGuard)
@@ -341,7 +360,7 @@ export class UserCollectionResolver {
   ) {
     const result = await this.userCollectionService.deleteUserCollection(
       userCollectionID,
-      user.uid,
+      user.uid
     );
 
     if (E.isLeft(result)) throwErr(result.left);
